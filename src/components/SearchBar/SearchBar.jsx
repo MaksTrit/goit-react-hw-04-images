@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import {
   StyledSearchBar,
   StyledSearchBtn,
@@ -9,49 +9,44 @@ import { TbSearch } from 'react-icons/tb';
 import { Notify } from 'notiflix';
 import PropTypes from 'prop-types';
 
-export class SearchBar extends Component {
-  state = {
-    value: '',
+export const SearchBar = ({ onSubmit }) => {
+  const [value, setValue] = useState('');
+
+  const handleChange = e => {
+    setValue(e.target.value);
   };
 
-  handleChange = ({ target: { value } }) => {
-    this.setState({ value });
-  };
-
-  handleSubmit = evt => {
+  const handleSubmit = evt => {
     evt.preventDefault();
-    const { value } = this.state;
     if (!value.trim()) {
       Notify.info('Please enter valid value');
-      this.setState({ value: '' });
+      setValue('');
       return;
     }
     const normalizedValue = value.trim().toLowerCase();
-    this.setState({ value: '' }, this.props.onSubmit(normalizedValue));
+    onSubmit(normalizedValue);
+    setValue('');
   };
+  return (
+    <StyledSearchBar>
+      <StyledSearchForm onSubmit={handleSubmit}>
+        <StyledSearchBtn type="submit">
+          <TbSearch />
+          <span>Search</span>
+        </StyledSearchBtn>
 
-  render() {
-    return (
-      <StyledSearchBar>
-        <StyledSearchForm onSubmit={this.handleSubmit}>
-          <StyledSearchBtn type="submit">
-            <TbSearch />
-            <span>Search</span>
-          </StyledSearchBtn>
-
-          <StyledSearchInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.handleChange}
-            value={this.state.value}
-          />
-        </StyledSearchForm>
-      </StyledSearchBar>
-    );
-  }
-}
+        <StyledSearchInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={handleChange}
+          value={value}
+        />
+      </StyledSearchForm>
+    </StyledSearchBar>
+  );
+};
 
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,

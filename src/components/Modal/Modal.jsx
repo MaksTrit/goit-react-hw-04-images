@@ -45,7 +45,7 @@ export const ModalWindow = ({ isOpen, tags, img, onClose }) => {
 
 ModalWindow.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onRequestClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   tags: PropTypes.string.isRequired,
   img: PropTypes.string.isRequired,
 };
